@@ -1,90 +1,78 @@
-// Optimal 
 
 
-// SET :
-
-// class Solution {
-// public:
-//     bool hasDuplicate(vector<int>& nums) {
-        
-//         int n = nums.size();
-//         unordered_set<int>st;
-
-//         for (int x : nums){
-//             if(st.find(x) != st.end()){
-//                 return true;
-//             }
-//             st.insert(x);
-
-//             }
-//         return false;
-//     }
-// };
-
-
-//===============
-
-// MAP:
-
-
-class Solution {
-public:
-    bool hasDuplicate(vector<int>& nums) {
-        
-        int n = nums.size();
-        unordered_map<int,int>mp;
-
-        for (int i=0; i<n; i++){
-            mp[nums[i]]++;
-            if(mp[nums[i]] > 1) {
-                return true;
-        }        }
-        return false;
-    }
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-// Brutte Force Solution
-   //  Time Complexity = O(n²)  &&  Space Complexity = O(1)
+//Brutte Solution
+   // TC = O(N logN)    
+   // SC = O(1) => (If sorting is considered in-place; otherwise it depends on the sort implementation.)
 
 // class Solution {
 // public:
-//     bool hasDuplicate(vector<int>& nums) {
+//     bool isAnagram(string s, string t) {
         
-//         int n = nums.size();
-//         for(int i=0; i<n; i++){
-//             for(int j=i+1; j<n; j++){
-//                 if(nums[i]==nums[j])
-//                 return true;
-//             }
+//         if(s.length() != t.length() ){
+//             return false;
 //         }
-//         return false;
+
+//         sort(s.begin(), s.end());
+//         sort(t.begin(), t.end());
+
+//         return s == t;
 //     }
 // };
-
-//=================================================
-
-// Overall:
-
-// Time: O(n log n)
-// Space: Depends on the sorting implementation. For std::sort, it's typically O(log n) due to recursion stack.
-
-// #include<bits/stdc++.h>
-// class Solution {
-// public:
-//     bool hasDuplicate(vector<int>& nums) {
-        
-//         int n = nums.size();
-//         sort(nums.begin(), nums.end() );
-//            for(int i=0; i<n-1; i++){
-//                 if(nums[i]==nums[i+1]){
-//                 return true;
-//                 }
-//         }
-//         return false;
-//     }
-// };
-
 
 //======================================================================================================
+                     // Better Solution 
+//  TC =O(n)
+// SC = (k) where k is the number of distinct characters (at most 26 for lowercase English letters).
+// class Solution {
+// public:
+//     bool isAnagram(string s, string t) {
+        
+//         unordered_map<char,int>mp;
+//         if(s.length() != t.length() ){
+//             return false;
+//         }
+
+//         for(auto x:s){
+//             mp[x]++;
+//         }
+//         for (auto ch:t){
+//             mp[ch]--;
+//         }
+
+//          for (auto p : mp)
+//         {
+//             if (p.second != 0)
+//                 return false;
+//         }
+//         return true;
+
+//     }
+// };
+
+//========================================================================
+
+// Optimal Solutions:
+
+class Solution {
+    public:
+     bool isAnagram(string s, string t) {
+
+         if(s.length() != t.length() ){
+             return false;
+         }
+
+         int arr[26] = {0};
+
+         for(char ch:s)
+            arr[ch-'a']++;
+
+        for(auto b:t)
+            arr[b-'a']--;
+
+        for(int n:arr){
+            if(n!=0)
+                return false;
+        }
+        return true;
+     }
+};

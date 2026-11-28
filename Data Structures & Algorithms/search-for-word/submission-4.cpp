@@ -1,0 +1,99 @@
+// M = number of rows.
+// N = number of columns.
+// L = length of the word
+
+// TC = O(M * N * 4^L)
+// SC = O(M*N + L)
+
+// class Solution {
+// public:
+
+//     bool dfs( int idx, int row, int col, int rows, int cols,vector<vector<char>>& board, string &word,              vector<vector<bool>> &visited) {
+
+//         if( idx == word.length())  return true;
+
+//         if( row<0 || row>=rows || col <0 || col>=cols || board[row][col] != word[idx] || visited[row][col]){
+//             return false;
+//         }
+
+//         visited[row][col] = true;
+
+//         bool found = dfs(idx+1, row-1, col, rows, cols, board, word, visited) || 
+//                      dfs(idx+1, row, col+1, rows, cols, board, word, visited) || 
+//                      dfs(idx+1, row+1, col, rows, cols, board, word, visited) || 
+//                      dfs(idx+1, row, col-1, rows, cols, board, word, visited);
+
+//         visited[row][col] = false;
+
+//         return found;
+//     }
+
+//     bool exist(vector<vector<char>>& board, string word) {
+        
+//         if(board.size() == 0 || word == "") return false; // word.length()==0;
+
+//         int rows = board.size();
+//         int cols = board[0].size();
+//         vector<vector<bool>> visited(rows, vector<bool>( cols, false));
+
+//         for(int r=0; r<rows; r++){
+//             for(int c=0; c<cols; c++){
+
+//                 if( dfs(0, r, c, rows, cols, board, word, visited) ) {
+//                     return true;
+//                 }
+//             }
+//         }
+//         return false;
+//     }
+// };
+
+
+// ==========================================================================
+
+// M = number of rows.
+// N = number of columns.
+// L = length of the word
+
+// TC = O(M * N * 4^L)
+// SC = O(L)
+
+//Modifies board Temporarily
+
+class Solution {
+public:
+
+        bool DFS(vector<vector<char>>& board, string word, int i, int j, int idx) {
+		//check if all the alphabets in the word is checked
+        if(idx == word.size()) return true; 
+        
+		//check if i and j are out of bound or if the characters aren't equal
+        if(i < 0 || i >= board.size() || j < 0 || j >= board[i].size() || board[i][j] != word[idx]) return false;
+        
+		//mark as visited 
+        board[i][j] = '0';
+        
+		//branch out in all 4 directions
+        bool status = DFS(board, word, i + 1, j, idx + 1) ||  //down
+                        DFS(board, word, i, j + 1, idx + 1) ||  //right
+                        DFS(board, word, i - 1, j, idx + 1) ||  //up
+                        DFS(board, word, i, j - 1, idx + 1);  //left
+        
+		//change the character back for other searches
+        board[i][j] = word[idx];
+		
+        return status;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        if(word == "") return false;
+        
+        for(int i = 0; i < board.size(); i++) 
+            for(int j = 0; j < board[i].size(); j++) 
+				//check if the characters are equal then call DFS
+                if(board[i][j] == word[0] && DFS(board, word, i, j, 0))
+                    return true;
+        
+        return false;
+    }
+};
